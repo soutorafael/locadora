@@ -20,11 +20,11 @@ public class ServiceLocacaoItens {
 	private RepositoryLocacaoItem repositoryLocacaoItem;
 	
 	public void salvarLocacalItem(Locacao locacao) {
-		LocacaoItens locacaoItens = new LocacaoItens();
-		locacaoItens.setIdLocacao(locacao);
 		
 		List<Filme> listFilmes = serviceFilme.listaFilmesPorID(locacao.getListFilmes());
 		listFilmes.forEach(iFIlme -> {
+			LocacaoItens locacaoItens = new LocacaoItens();
+			locacaoItens.setIdLocacao(locacao);
 			locacaoItens.setListFilmes(iFIlme);
 			repositoryLocacaoItem.save(locacaoItens);
 		});

@@ -60,9 +60,16 @@ public class ServiceFilme {
 		});
 		return listFilme;
 	}
+	
+	public List<Filme> listaFilmes(List<Long> listFilmes) {
+		return repositoryFilme.listFilmes(listFilmes);
+	}
 
-	public void devolverFilmes(List<Long> idsFilmes) {
-		repositoryFilme.devolverFilmes(idsFilmes);
+	public void devolverFilmes(List<Filme> listFilme) {
+		listFilme.forEach(filme -> {
+			filme.setDisponivel(Boolean.TRUE);
+			repositoryFilme.save(filme);
+		});
 	}
 
 }

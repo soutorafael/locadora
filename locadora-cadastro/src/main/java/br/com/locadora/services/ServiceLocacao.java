@@ -2,11 +2,13 @@ package br.com.locadora.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.locadora.entity.Cliente;
+import br.com.locadora.entity.Filme;
 import br.com.locadora.entity.Locacao;
 import br.com.locadora.entity.LocacaoItens;
 import br.com.locadora.repository.RepositoryLocacao;
@@ -46,19 +48,23 @@ public class ServiceLocacao {
 	}
 
 	public Locacao devolverFilmes(Locacao locacao) {
+		Optional<Locacao> objetoLocacaoRecuperado = repositoryLocacao.findById(locacao.getIdLocacao());
+		if (objetoLocacaoRecuperado.isPresent()) {
+			locacao = objetoLocacaoRecuperado.get();
+		}
 		locacao.setPendente(Boolean.FALSE);
 		List<LocacaoItens> listLocacaoItens = serviceLocacaoItens.listarLocacaoItens(locacao);
-		List<Long> idsFilmes = recuperaIdsFIlmes(listLocacaoItens);
+		List<Filme> idsFilmes = recuperaIdsFIlmes(listLocacaoItens);
 		serviceFilmes.devolverFilmes(idsFilmes);
 		return repositoryLocacao.save(locacao);
 	}
 
-	private List<Long> recuperaIdsFIlmes(List<LocacaoItens> listLocacaoItens) {
+	private List<Filme> recuperaIdsFIlmes(List<LocacaoItens> listLocacaoItens) {
 		List<Long> idsFilmes = new ArrayList<>();
 		listLocacaoItens.forEach(locaItens -> {
 			idsFilmes.add(locaItens.getListFilmes().getIdFilme());
 		});
-		return idsFilmes;
+		return serviceFilmes.listaFilmes(idsFilmes);
 	}
 
 }

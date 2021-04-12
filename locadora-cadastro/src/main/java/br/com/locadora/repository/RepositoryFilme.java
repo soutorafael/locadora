@@ -17,14 +17,10 @@ public interface RepositoryFilme extends JpaRepository<Filme, Long> {
 	@Query("SELECT f FROM Filme f where f.idFilme in (:listFilmes)")
 	List<Filme> listFilmes(@Param("listFilmes") List<Long> listFilmes);
 	
-	@Transactional
-	@Modifying
-	@Query("update Filme f set f.isDisponivel = 1 where f.idFilme in (:listFilmes)")
-	void alterarStatusFilme(@Param("listFilmes") List<Filme> listFilme);
 	
 	@Transactional
 	@Modifying
 	@Query("update Filme f set f.isDisponivel = 0 where f.idFilme in (:listFilmes)")
-	void devolverFilmes(List<Long> idsFilmes);
+	void devolverFilmes(@Param("listFilmes") List<Filme> listFilme);
 
 }
